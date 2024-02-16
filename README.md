@@ -17,3 +17,16 @@ Authors:
 
 
 _Coming soon, stay tuned..._
+
+## Citation
+If you find our project helpful, please cite our paper:
+```
+@inproceedings{
+khanna2024diffusionsat,
+title={DiffusionSat: A Generative Foundation Model for Satellite Imagery},
+author={Samar Khanna and Patrick Liu and Linqi Zhou and Chenlin Meng and Robin Rombach and Marshall Burke and David B. Lobell and Stefano Ermon},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=I5webNFDgQ}
+}
+```
