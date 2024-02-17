@@ -1,5 +1,5 @@
 # DiffusionSat (ICLR 2024)
-**[Website (Coming Soon)](https://github.com/samar-khanna/DiffusionSat/)** | 
+**[Website](https://samar-khanna.github.io/DiffusionSat/)** | 
 **[Paper](https://arxiv.org/abs/2312.03606)** 
 
 This is the official repository for the ICLR 2024 paper 
@@ -14,9 +14,6 @@ Authors:
 [Marshall Burke](https://web.stanford.edu/~mburke/), 
 [David B. Lobell](https://earth.stanford.edu/people/david-lobell#gs.5vndff), 
 [Stefano Ermon](https://cs.stanford.edu/~ermon/).
-
-
-_Coming soon, stay tuned..._
 
 ## Citation
 If you find our project helpful, please cite our paper:

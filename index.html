@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="DiffusionSat: A Generative Foundation Model For Satellite Imagery">
+  <meta name="keywords" content="Satellite Imagery, Generative AI, Diffusion Models, DiffusionSat">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DiffusionSat</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script> -->
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="icon" href="./static/images/favicon.svg">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <!-- <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a> -->
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://sustainlab-group.github.io/SatMAE/">
+            SatMAE
+          </a>
+          <a class="navbar-item" href="https://github.com/CompVis/stable-diffusion">
+            Stable Diffusion
+          </a>
+          <a class="navbar-item" href="https://github.com/lllyasviel/ControlNet">
+            ControlNet
+          </a>
+          <!-- <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape -->
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">DiffusionSat: A Generative Foundation Model For Satellite Imagery</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://www.linkedin.com/in/samar-khanna-133b8190/">Samar Khanna*</a>,</span>
+            <span class="author-block">
+              <a href="https://web.stanford.edu/~pliu1/">Patrick Liu</a>,</span>
+            <span class="author-block">
+              <a href="https://alexzhou907.github.io">Linqi (Alex) Zhou</a>,</span>
+            <span class="author-block">
+              <a href="https://chenlin9.github.io/">Chenlin Meng</a>,</span>
+            <span class="author-block">
+              <a href="https://github.com/rromb">Robin Rombach</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://web.stanford.edu/~mburke/">Marshall Burke</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://earth.stanford.edu/people/david-lobell#gs.5vndff">David B. Lobell</a>,
+            </span>
+            <span class="author-block">
+              <a href="https://cs.stanford.edu/~ermon/">Stefano Ermon</a>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Stanford University</span>
+            <!-- <span class="author-block"><sup>2</sup>Google Research</span> -->
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">*Correspondence to samarkhanna [at] cs.stanford.edu.</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/pdf/2312.03606.pdf"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2312.03606"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Video Link. -->
+<!--              <span class="link-block">-->
+<!--                <a href="https://recorder-v3.slideslive.com/?share=75759&s=4597a5f4-7f86-4e18-a11b-fbac51cb7616"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="fab fa-youtube"></i>-->
+<!--                  </span>-->
+<!--                  <span>Video</span>-->
+<!--                </a>-->
+<!--              </span>-->
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/samar-khanna/DiffusionSat"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+<!--              <span class="link-block">-->
+<!--                <a href="https://purl.stanford.edu/vg497cb6002"-->
+<!--                   class="external-link button is-normal is-rounded is-dark">-->
+<!--                  <span class="icon">-->
+<!--                      <i class="far fa-images"></i>-->
+<!--                  </span>-->
+<!--                  <span>fMoW-Sentinel Data</span>-->
+<!--                  </a>-->
+<!--              </span>-->
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/teaser.png" height="100%">
+    </img>
+      <h2 class="subtitle has-text-centered">
+        Conditioning on freely available metadata and using large, publicly available satellite imagery datasets shows DiffusionSat is a powerful generative foundation model for remote sensing data.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser" autoplay muted loop playsinline height="100%">
+        <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/teaser.mp4"
+                type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Nerfies</span> turns selfie videos from your phone into
+        free-viewpoint
+        portraits.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="container">
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item item-steve">
+          <video poster="" id="steve" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/steve.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-chair-tp">
+          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/chair-tp.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-shiba">
+          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/shiba.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-fullbody">
+          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/fullbody.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-blueshirt">
+          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/blueshirt.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-mask">
+          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/mask.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-coffee">
+          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/coffee.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item item-toby">
+          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/toby2.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Diffusion models have achieved state-of-the-art results on many modalities including images, speech, and video.
+            However, existing models are not tailored to support remote sensing data, which is widely used in
+            important applications including environmental monitoring and crop-yield prediction.
+            Satellite images are significantly different from natural images -- they can be multi-spectral,
+            irregularly sampled across time -- and existing diffusion models trained on images from the Web do not support them.
+            Furthermore, remote sensing data is inherently spatio-temporal, requiring conditional generation tasks
+            not supported by traditional methods based on captions or images. In this paper, we present DiffusionSat,
+            to date the largest generative foundation model trained on a collection of publicly available large,
+            high-resolution remote sensing datasets. As text-based captions are sparsely available for satellite images,
+            we incorporate the associated metadata such as geolocation as conditioning information.
+            Our method produces realistic samples and can be used to solve multiple generative tasks including
+            temporal generation, superresolution given multi-spectral inputs and in-painting.
+            Our method outperforms previous state-of-the-art methods for satellite image generation and is the
+            first large-scale <i>generative</i> foundation model for satellite imagery.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+
+    <!-- Paper video. -->
+    <!-- <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Video</h2>
+        <div class="publication-video">
+          <iframe src="https://www.youtube.com/embed/MrKrnHhk8IA?rel=0&amp;showinfo=0"
+                  frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+    <!--/ Paper video. -->
+  </div>
+</section>
+
+<section class="section" id="Single Image Generation">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Single Image Generation</h2>
+    <div class="content has-text-justified">
+
+      <p>
+        First, we discuss how DiffusionSat generates standalone (single) images.
+        We initialize a denoising UNet with StableDiffusion 2.1 weights and pretrain the model on a collection of
+        large, publicly available satellite datasets such as <a href="https://github.com/fMoW">fMoW</a>,
+        <a href="https://spacenet.ai/datasets/">SpaceNet</a> and <a href="https://github.com/allenai/satlas">Satlas</a>.
+        We generate rough captions from available class and bounding box information.
+        Simply using these captions isn't enough-- we find that the key to good satellite image generation is to
+        condition on <i>numerical metadata</i> in the same way as the diffusion timestep (with a sinusoidal projection
+        and MLP embedding). Doing so leads to more controllable generation, seen below.
+
+      </p>
+    </div>
+    <img src="static/images/diffusion_sat_samples.png" height="100%">
+  </div>
+</section>
+
+<section class="section" id="Inverse Problems">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Inverse Problems</h2>
+
+    <p>
+      In addition to single image generation, we demonstrate DiffusionSat's ability to solve a range of inverse
+      problems, such as superresolution, temporal prediction/interpolation, and in-painting. Broadly, solving these problems
+      requires conditioning on a <i>control signal</i>, which can be another image, spectral bands, or a sequence of images.<br><br>
+
+      To tackle this class of problems, we modify a ContolNet architecture to accept sequences of image input. Each item
+      in the sequence is associated with its own metadata. This architecture then enables DiffusionSat to condition on
+      an input control signal (eg: a low-resolution image) and then generate a new image corresponding to target metadata
+      (eg: a superresolved high-resolution image).
+
+    </p>
+
+    <img src="static/images/diffusion_sat_controlnet.png" height="100%"></img>
+    <div class="subtitle has-text-centered">
+      A 3D ContolNet that can flexibly condition on sequences of inputs with associated metadata.
+    </div>
+
+  </div>
+</section>
+
+<!--
+<section class="section">
+  <div class="container is-max-desktop">
+
+    <div class="columns is-centered">
+
+      <div class="column">
+        <div class="content">
+          <h2 class="title is-3">Visual Effects</h2>
+          <p>
+            Using <i>nerfies</i> you can create fun visual effects. This Dolly zoom effect
+            would be impossible without nerfies since it would require going through a wall.
+          </p>
+          <video id="dollyzoom" autoplay controls muted loop playsinline height="100%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/dollyzoom-stacked.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div class="column">
+        <h2 class="title is-3">Matting</h2>
+        <div class="columns is-centered">
+          <div class="column content">
+            <p>
+              As a byproduct of our method, we can also solve the matting problem by ignoring
+              samples that fall outside of a bounding box during rendering.
+            </p>
+            <video id="matting-video" controls playsinline height="100%">
+              <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/matting.mp4"
+                      type="video/mp4">
+            </video>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Animation</h2>
+
+        <h3 class="title is-4">Interpolating states</h3>
+        <div class="content has-text-justified">
+          <p>
+            We can also animate the scene by interpolating the deformation latent codes of two input
+            frames. Use the slider here to linearly interpolate between the left frame and the right
+            frame.
+          </p>
+        </div>
+        <div class="columns is-vcentered interpolation-panel">
+          <div class="column is-3 has-text-centered">
+            <img src="https://homes.cs.washington.edu/~kpar/nerfies/images/interpolate_start.jpg"
+                 class="interpolation-image"
+                 alt="Interpolate start reference image."/>
+            <p>Start Frame</p>
+          </div>
+          <div class="column interpolation-video-column">
+            <div id="interpolation-image-wrapper">
+              Loading...
+            </div>
+            <input class="slider is-fullwidth is-large is-info"
+                   id="interpolation-slider"
+                   step="1" min="0" max="100" value="0" type="range">
+          </div>
+          <div class="column is-3 has-text-centered">
+            <img src="https://homes.cs.washington.edu/~kpar/nerfies/images/interpolate_end.jpg"
+                 class="interpolation-image"
+                 alt="Interpolation end reference image."/>
+            <p class="is-bold">End Frame</p>
+          </div>
+        </div>
+        <br/>
+
+        <h3 class="title is-4">Re-rendering the input video</h3>
+        <div class="content has-text-justified">
+          <p>
+            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
+            viewpoint such as a stabilized camera by playing back the training deformations.
+          </p>
+        </div>
+        <div class="content has-text-centered">
+          <video id="replay-video"
+                 controls
+                 muted
+                 preload
+                 playsinline
+                 width="75%">
+            <source src="https://homes.cs.washington.edu/~kpar/nerfies/videos/replay.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+
+      </div>
+    </div>
+
+
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            There's a lot of excellent work that was introduced around the same time as ours.
+          </p>
+          <p>
+            <a href="https://arxiv.org/abs/2104.09125">Progressive Encoding for Neural Optimization</a> introduces an idea similar to our windowed position encoding for coarse-to-fine optimization.
+          </p>
+          <p>
+            <a href="https://www.albertpumarola.com/research/D-NeRF/index.html">D-NeRF</a> and <a href="https://gvv.mpi-inf.mpg.de/projects/nonrigid_nerf/">NR-NeRF</a>
+            both use deformation fields to model non-rigid scenes.
+          </p>
+          <p>
+            Some works model videos with a NeRF by directly modulating the density, such as <a href="https://video-nerf.github.io/">Video-NeRF</a>, <a href="https://www.cs.cornell.edu/~zl548/NSFF/">NSFF</a>, and <a href="https://neural-3d-video.github.io/">DyNeRF</a>
+          </p>
+          <p>
+            There are probably many more by the time you are reading this. Check out <a href="https://dellaert.github.io/NeRF/">Frank Dellart's survey on recent NeRF papers</a>, and <a href="https://github.com/yenchenlin/awesome-NeRF">Yen-Chen Lin's curated list of NeRF papers</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+-->
+
+<section class="section" id="Superresolution">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Superresolution</h2>
+
+    <p>
+      Arguably, the most widely recognized generative inverse problem for remote sensing data is superresolution.
+      We show that given a multi-spectral, low-resolution (10m-60m GSD) Sentinel-2 image, DiffusionSat can reconstruct
+      the corresponding high-resolution (~0.3m GSD) fMoW image. This is an especially challenging task, since the input
+      must be upsampled >20x. We train the super-resolution model using a dataset of paired
+      (<a href="https://sustainlab-group.github.io/SatMAE/">fMoW-Sentinel</a>, <a href="https://github.com/fMoW">fMoW-RGB</a>) images.
+
+    </p>
+
+    <img src="static/images/diffusion_sat_superres.png" height="100%"></img>
+    <div class="subtitle has-text-centered">
+        Results on the superresolution task, comparing DiffusionSat with other baselines.
+    </div>
+
+    <p>
+      SWIR, NIR, and RGB refer to the different multispectral bands of Sentinel-2 images. HR corresponds to the
+      ground-truth high-resolution image. SD refers to vanilla StableDiffusion. DiffusionSat does well to reconstruct
+      realistic high-resolution images compared to other baselines. However, like other diffusion models, it can sometimes
+      hallucinate small details in the images to preserve realism over an exact reconstruction.<br><br>
+
+      Read the paper for more details on another super-resolution task using the Texas Housing dataset!
+
+    </p>
+
+  </div>
+</section>
+
+<section class="section" id="Temporal Prediction">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Temporal Prediction</h2>
+
+    <p>
+      With DiffusionSat's ability to condition on input sequences, we can tackle inverse problems such as temporal
+      prediction and interpolation. Given a sequence of input satellite images of a location distributed across time
+      (not necessarily in order), along with their corresponding metadata, we can prompt DiffusionSat to reconstruct an
+      image in the past, in the future, or anywhere in the middle of the temporal sequence. We use the
+      <a href="https://github.com/fMoW">fMoW-RGB</a> dataset and construct temporal sequences of images of the same location.
+      DiffusionSat is then trained to reconstruct a randomly chosen target image given the other images (in any order)
+      of the sequence.
+    </p>
+
+    <img src="static/images/diffusion_sat_temporal.png" height="100%"></img>
+    <div class="subtitle has-text-centered">
+        Results on the temporal prediction task. DiffusionSat can predict images in the past or future.
+    </div>
+
+    <p>
+      The ground truth images are in the center, marked by their years and months. The column of images with the date
+      marked under the blue date represent the target image in the past to reconstruct, given the other three images
+      (to the right) as input.
+      The reconstructions from different models are shown to the left. Similarly, the column of images marked under the
+      red date are the target future images to reconstruct given the three images to the left as input.
+      DiffusionSat is able to predict images in the past and future effectively, once again proving capable to tackle
+      challenging inverse problems.
+
+    </p>
+
+  </div>
+</section>
+
+
+<section class="section" id="Temporal Inpainting">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Temporal Inpainting</h2>
+
+    <p>
+      Inpainting is another inverse problem where the goal is to reconstruct portions of the image which have been
+      corrupted. Rather than artificially corrupt input images, we choose the <a href="https://www.v7labs.com/open-datasets/xbd-dataset">xBD dataset</a>
+      which contains before and after images of locations afflicted by different natural disasters. The goal is to reconstruct
+      the before-disaster image given the post-disaster image, or vice versa. In-painting consists of reconstructing
+      damaged roads, houses, and landscapes given the post-disaster image, or adding damage to regular images.
+    </p>
+
+    <img src="static/images/diffusion_sat_inpainting.png" height="100%"></img>
+    <div class="subtitle has-text-centered">
+        Results on the inpainting task. DiffusionSat can reconstruct or visualize damaged areas effectively.
+    </div>
+
+    <p>
+      The caption on the left of each row of 4 images is the disaster type. The "pred-past" column represents DiffusionSat's
+      reconstruction given the after-disaster image (marked by the date in red) as input. Similarly for the "pred-future"
+      column, given the before-disaster image as input. DiffusionSat effectively reconstructs houses and roads
+      which have been partially or almost completely damaged in floods, fires and other disasters. It can even reconstruct
+      parts of the image masked by cloud cover. We hope this can play a role in assisting teams to respond effectively to
+      natural disasters.
+
+    </p>
+
+  </div>
+</section>
+
+<section class="section" id="Temporal Sequence Generation">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Temporal Sequence Generation</h2>
+
+    <p>
+      We can combine the single-image and conditional DiffusionSat architectures to auto-regressively generate full
+      sequences of satellite images! We do this by generating the "seed" image
+      from single image DiffusionSat (given an input text prompt and metadata), and then using conditional
+      DiffusionSat to predict the next image for some desired metadata.
+      Then, both images form the control signal input for the next generation, and so on.
+    </p>
+
+    <img src="static/images/diffusion_sat_gen_sequence.png" height="100%"></img>
+    <div class="subtitle has-text-centered">
+        DiffusionSat can generate full sequences of satellite images!
+    </div>
+
+  </div>
+</section>
+
+<section class="section" id="Limitations">
+  <div class="container is-max-desktop content">
+    <h2 class="title">Limitations</h2>
+
+    <p>
+      Like other diffusion models, DiffusionSat can occasionally hallucinate details, and its results can vary significantly
+      for a given prompt or control signal. Users should be mindful of these limitations when assessing the outputs of models
+      like DiffusionSat. Further research on controlling the reliability of diffusion model outputs will be crucial to
+      make accurate geospatial predictions for inverse problems such as super-resolution and temporal prediction. More
+      research on producing large-scale caption-annotated satellite image datasets will also be very helpful!
+    </p>
+
+
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@inproceedings{
+    khanna2024diffusionsat,
+    title={DiffusionSat: A Generative Foundation Model for Satellite Imagery},
+    author={Samar Khanna and Patrick Liu and Linqi Zhou and Chenlin Meng and Robin Rombach and Marshall Burke and David B. Lobell and Stefano Ermon},
+    booktitle={The Twelfth International Conference on Learning Representations},
+    year={2024},
+    url={https://openreview.net/forum?id=I5webNFDgQ}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <!-- <a class="icon-link"
+         href="https://homes.cs.washington.edu/~kpar/nerfies/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a> -->
+      <!-- <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a> -->
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This website is borrowed from the <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a> of the Nerfies website.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
