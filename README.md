@@ -1,5 +1,5 @@
 # DiffusionSat (ICLR 2024)
-**[Website (Coming Soon)](https://github.com/samar-khanna/DiffusionSat/)** | 
+**[Website](https://samar-khanna.github.io/DiffusionSat/)** | 
 **[Paper](https://arxiv.org/abs/2312.03606)** 
 
 This is the official repository for the ICLR 2024 paper 
