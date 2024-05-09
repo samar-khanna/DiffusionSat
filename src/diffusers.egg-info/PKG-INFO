@@ -1,0 +1,131 @@
+Metadata-Version: 2.1
+Name: diffusers
+Version: 0.17.0.dev0
+Summary: Diffusers
+Home-page: https://github.com/huggingface/diffusers
+Author: The HuggingFace team
+Author-email: patrick@huggingface.co
+License: Apache
+Keywords: deep learning
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Scientific/Engineering :: Artificial Intelligence
+Requires-Python: >=3.7.0
+Description-Content-Type: text/markdown
+Requires-Dist: importlib_metadata
+Requires-Dist: filelock
+Requires-Dist: huggingface-hub>=0.13.2
+Requires-Dist: numpy
+Requires-Dist: regex!=2019.12.17
+Requires-Dist: requests
+Requires-Dist: Pillow
+Provides-Extra: quality
+Requires-Dist: urllib3<=2.0.0; extra == "quality"
+Requires-Dist: black~=23.1; extra == "quality"
+Requires-Dist: isort>=5.5.4; extra == "quality"
+Requires-Dist: ruff>=0.0.241; extra == "quality"
+Requires-Dist: hf-doc-builder>=0.3.0; extra == "quality"
+Provides-Extra: docs
+Requires-Dist: hf-doc-builder>=0.3.0; extra == "docs"
+Provides-Extra: training
+Requires-Dist: accelerate>=0.11.0; extra == "training"
+Requires-Dist: datasets; extra == "training"
+Requires-Dist: protobuf<4,>=3.20.3; extra == "training"
+Requires-Dist: tensorboard; extra == "training"
+Requires-Dist: Jinja2; extra == "training"
+Provides-Extra: test
+Requires-Dist: compel==0.1.8; extra == "test"
+Requires-Dist: datasets; extra == "test"
+Requires-Dist: Jinja2; extra == "test"
+Requires-Dist: k-diffusion>=0.0.12; extra == "test"
+Requires-Dist: librosa; extra == "test"
+Requires-Dist: parameterized; extra == "test"
+Requires-Dist: pytest; extra == "test"
+Requires-Dist: pytest-timeout; extra == "test"
+Requires-Dist: pytest-xdist; extra == "test"
+Requires-Dist: requests-mock==1.10.0; extra == "test"
+Requires-Dist: safetensors; extra == "test"
+Requires-Dist: sentencepiece!=0.1.92,>=0.1.91; extra == "test"
+Requires-Dist: scipy; extra == "test"
+Requires-Dist: torchvision; extra == "test"
+Requires-Dist: transformers>=4.25.1; extra == "test"
+Provides-Extra: torch
+Requires-Dist: torch>=1.4; extra == "torch"
+Requires-Dist: accelerate>=0.11.0; extra == "torch"
+Provides-Extra: flax
+Requires-Dist: jax!=0.3.2,>=0.2.8; extra == "flax"
+Requires-Dist: jaxlib>=0.1.65; extra == "flax"
+Requires-Dist: flax>=0.4.1; extra == "flax"
+Provides-Extra: dev
+Requires-Dist: urllib3<=2.0.0; extra == "dev"
+Requires-Dist: black~=23.1; extra == "dev"
+Requires-Dist: isort>=5.5.4; extra == "dev"
+Requires-Dist: ruff>=0.0.241; extra == "dev"
+Requires-Dist: hf-doc-builder>=0.3.0; extra == "dev"
+Requires-Dist: compel==0.1.8; extra == "dev"
+Requires-Dist: datasets; extra == "dev"
+Requires-Dist: Jinja2; extra == "dev"
+Requires-Dist: k-diffusion>=0.0.12; extra == "dev"
+Requires-Dist: librosa; extra == "dev"
+Requires-Dist: parameterized; extra == "dev"
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-timeout; extra == "dev"
+Requires-Dist: pytest-xdist; extra == "dev"
+Requires-Dist: requests-mock==1.10.0; extra == "dev"
+Requires-Dist: safetensors; extra == "dev"
+Requires-Dist: sentencepiece!=0.1.92,>=0.1.91; extra == "dev"
+Requires-Dist: scipy; extra == "dev"
+Requires-Dist: torchvision; extra == "dev"
+Requires-Dist: transformers>=4.25.1; extra == "dev"
+Requires-Dist: accelerate>=0.11.0; extra == "dev"
+Requires-Dist: datasets; extra == "dev"
+Requires-Dist: protobuf<4,>=3.20.3; extra == "dev"
+Requires-Dist: tensorboard; extra == "dev"
+Requires-Dist: Jinja2; extra == "dev"
+Requires-Dist: hf-doc-builder>=0.3.0; extra == "dev"
+Requires-Dist: torch>=1.4; extra == "dev"
+Requires-Dist: accelerate>=0.11.0; extra == "dev"
+Requires-Dist: jax!=0.3.2,>=0.2.8; extra == "dev"
+Requires-Dist: jaxlib>=0.1.65; extra == "dev"
+Requires-Dist: flax>=0.4.1; extra == "dev"
+
+# DiffusionSat (ICLR 2024)
+**[Website](https://samar-khanna.github.io/DiffusionSat/)** | 
+**[Paper](https://arxiv.org/abs/2312.03606)** 
+
+This is the official repository for the ICLR 2024 paper 
+"_DiffusionSat: A Generative Foundation Model For Satellite Imagery_".  
+
+Authors: 
+[Samar Khanna](https://www.samarkhanna.com) <sup>1</sup>, 
+[Patrick Liu](https://web.stanford.edu/~pliu1/), 
+[Linqi (Alex) Zhou](https://alexzhou907.github.io), 
+[Chenlin Meng](https://chenlin9.github.io/), 
+[Robin Rombach](https://github.com/rromb), 
+[Marshall Burke](https://web.stanford.edu/~mburke/), 
+[David B. Lobell](https://earth.stanford.edu/people/david-lobell#gs.5vndff), 
+[Stefano Ermon](https://cs.stanford.edu/~ermon/).
+
+
+_Coming soon, stay tuned..._
+
+## Citation
+If you find our project helpful, please cite our paper:
+```
+@inproceedings{
+khanna2024diffusionsat,
+title={DiffusionSat: A Generative Foundation Model for Satellite Imagery},
+author={Samar Khanna and Patrick Liu and Linqi Zhou and Chenlin Meng and Robin Rombach and Marshall Burke and David B. Lobell and Stefano Ermon},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=I5webNFDgQ}
+}
+```
