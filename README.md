@@ -40,7 +40,38 @@ The relevant model checkpoints can be found here:
 _Coming soon, stay tuned..._
 
 ## Training
-_Coming soon, stay tuned..._
+These sections describe how to launch training using `accelerate`.
+
+### Single-Image Training
+To train the `(text, metadata) -> single_image` model, use the following command:
+```shell
+./launch_scripts/launch_256_fmow_satlas_spacenet_img_txt_md.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
+```
+Here we provide an example config file to use with `accelerate`, but you can also configure your own
+file by running `accelerate config` and following the steps. This will save the config file in the 
+cache location (eg: `.cache/huggingface/accelerate/default_config.yaml`), 
+and you can simply copy over the `.yaml` file to `launch_accelerate_configs/` or remove the 
+`--config_file` argument from `accelerate launch` in the bash script.
+
+## Datasets
+The datasets we use are in [`webdataset`](https://github.com/webdataset/webdataset) format.
+You will need to prepare your datasets in this format to be able to train using the given code,
+or you can modify the data-loading to use your own custom dataset formats.
+
+We have provided example shardlists in `webdataset_shards`. The training code will read the relevant file,
+and load data using the data paths in this file. The advantage of using `webdataset` is that your data
+does not need to only be on disk, and you can stream data from buckets in AWS S3 as well.
+
+
+#### fMoW
+Example format for each entry in the fMoW webdataset `.tar` file.
+```
+__key__: fmow-{cls_name}-{instance_id}  # eg: fmow-airport-airport_0
+output.cls: label_idx  # eg: 32
+input.npy: (h,w,c) numpy array
+metadata.json: {'img_filename': ..., 'gsd': ..., 'cloud_cover': ..., 'timestamp': ..., 'country_code': ...}
+```
+Note that fMoW also requires a metadata `.csv` file.
 
 ## Citation
 If you find our project helpful, please cite our paper:

@@ -548,7 +548,9 @@ class SatUNet(ModelMixin, ConfigMixin, UNet2DConditionLoadersMixin):
                 f"Invalid metadata shape: {metadata.shape}. Need batch x num_metadata"
 
             md_bsz = metadata.shape[0]
+            # invalid_metadata_mask = metadata == -1.  # (N, num_md)
             metadata = self.time_proj(metadata.view(-1)).view(md_bsz, self.num_metadata, -1)  # (N, num_md, D)
+            # metadata[invalid_metadata_mask] = 0.
             metadata = metadata.to(dtype=self.dtype)
             for i, md_embed in enumerate(self.metadata_embedding):
                 md_emb = md_embed(metadata[:, i, :])  # (N, D)
