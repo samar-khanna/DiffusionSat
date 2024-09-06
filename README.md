@@ -37,6 +37,17 @@ The relevant model checkpoints can be found here:
 
 
 ## Conditional Image Generation
+
+The relevant model checkpoints can be found here:
+
+| Task                                  | Link     |
+|---------------------------------------|----------|
+| Texas Super-resolution                | [Download](https://drive.google.com/drive/u/2/folders/1MVg6RkUOC8YoEBEUmBbi0xPNmTHvDnB2) |
+| fMoW Sentinel -> RGB Super-resolution | [Download](https://drive.google.com/drive/u/2/folders/1xZAO3Pxm-v3t5PYa2_cfyJXGHNvmif7p) |
+
+
+The Jupyter notebook is:
+
 _Coming soon, stay tuned..._
 
 ## Training
@@ -52,6 +63,45 @@ file by running `accelerate config` and following the steps. This will save the 
 cache location (eg: `.cache/huggingface/accelerate/default_config.yaml`), 
 and you can simply copy over the `.yaml` file to `launch_accelerate_configs/` or remove the 
 `--config_file` argument from `accelerate launch` in the bash script.
+
+### Conditional (ControlNet) Training
+To train the `(text, target_metadata, conditioning_metadata, conditioning_images) -> single_image` ControlNet model, use the following commands, 
+detailed below. As a quick summary, these scripts use a frozen single-image model (see above) as a prior to 
+train a ControlNet (which could be a 3D ControlNet for temporal conditioning images). 
+This ControlNet can then generate a new image for the desired input text and metadata prompt, 
+conditioned on additional metadata and images.
+
+Note that you will need to specify the shardlist `.txt` files in `./webdataset_shards`. 
+You will also need to provide the path to the single-image model checkpoint 
+(by specifying this path in the `UNET_PATH` variable) that will remain frozen throughout training.
+
+#### Texas Housing Super-resolution
+```shell
+./launch_scripts/launch_texas_md_controlnet.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
+```
+This task uses the Texas housing dataset from [satellite-pixel-synthesis-pytorch](https://github.com/KellyYutongHe/satellite-pixel-synthesis-pytorch).
+The task is: given a low-res and high-res image of a location at time `T`, and a low-res image of the same location 
+at time `T'`, generate a high-res image of the location at time `T'`.
+
+#### fMoW-Sentinel -> fMoW-RGB Super-resolution
+```shell
+./launch_scripts/launch_fmow_md_superres.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
+```
+The task is: given a multi-spectral low-res image of a location (from [fMoW-Sentinel](https://github.com/sustainlab-group/SatMAE?tab=readme-ov-file#fmow-sentinel-dataset)), 
+generate the corresponding high-res RGB image (from [fMoW-RGB](https://github.com/fMoW/dataset)).
+
+#### fMoW Temporal Generation
+```shell
+./launch_scripts/launch_fmow_temporal_md_controlnet.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
+```
+This model conditions on a temporal sequence of input RGB images from fMoW-RGB to generate a single new image at a desired timestamp `T`.
+
+#### xBD Temporal Inpainting
+```shell
+./launch_scripts/launch_xbd_md_controlnet.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
+```
+The task is: given a past (or future) image of a location affected by a natural disaster, generate the future (or past) image
+after (or before) the natural disaster struck. We use the [xBD](https://github.com/DIUx-xView/xView2_baseline?tab=readme-ov-file#data-downloads) dataset.
 
 ## Datasets
 The datasets we use are in [`webdataset`](https://github.com/webdataset/webdataset) format.
