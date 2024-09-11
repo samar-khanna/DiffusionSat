@@ -689,7 +689,7 @@ class StableDiffusionControlNetPipeline(DiffusionPipeline, TextualInversionLoade
         # TODO: make more robust
         if metadata is None:
             return None
-        md = torch.tensor(metadata)
+        md = torch.as_tensor(metadata)
         if ndims == 2:
             assert (len(md.shape) == 1 and batch_size == 1) or (len(md.shape) == 2 and batch_size > 1)
             if len(md.shape) == 1:

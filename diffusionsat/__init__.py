@@ -8,7 +8,7 @@ from .data_util import (
     texas_tokenize_caption, xbd_tokenize_caption,
     fmow_numerical_metadata, satlas_numerical_metadata, spacenet_numerical_metadata,
     texas_numerical_metadata, xbd_numerical_metadata,
-    metadata_normalize, combine_text_and_metadata,
+    metadata_normalize, metadata_unnormalize, combine_text_and_metadata,
     fmow_temporal_images,
 )
 from .pipeline import StableDiffusionPipeline as DiffusionSatPipeline

@@ -454,6 +454,19 @@ def metadata_normalize(metadata, base_lon=180, base_lat=90, base_year=1980, max_
     return torch.tensor([lon, lat, gsd, cloud_cover, year, month, day])
 
 
+def metadata_unnormalize(norm_metadata, base_lon=180, base_lat=90, base_year=1980, max_gsd=1., scale=1000,
+                         is_print=False):
+    lon, lat, gsd, cloud_cover, year, month, day = norm_metadata
+    lon = lon / scale * (180 + base_lon) - (base_lon if is_print else 0)
+    lat = lat / scale * (90 + base_lat) - (base_lat if is_print else 0)
+    gsd = gsd / scale * max_gsd
+    cloud_cover = cloud_cover / scale
+    year = year / scale * (2100 - base_year) + (base_year if is_print else 0)
+    month = month / scale * 12
+    day = day / scale * 31
+    return torch.tensor([lon, lat, gsd, cloud_cover, year, month, day])
+
+
 def combine_text_and_metadata(text_caption, metadata, tokenizer, return_text=False):
 
     lon, lat = metadata[0].item(), metadata[1].item()
