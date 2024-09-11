@@ -38,17 +38,16 @@ The relevant model checkpoints can be found here:
 
 ## Conditional Image Generation
 
+The Jupyter notebook that demonstrates generation with 3D ControlNets is shown
+for the Texas housing dataset in `notebooks/controlnet_texas_samples.ipynb`. 
+Generating with a ControlNet that accepts a single conditioning image + metadata is similar.
+
 The relevant model checkpoints can be found here:
 
 | Task                                  | Link     |
 |---------------------------------------|----------|
 | Texas Super-resolution                | [Download](https://drive.google.com/drive/u/2/folders/1MVg6RkUOC8YoEBEUmBbi0xPNmTHvDnB2) |
 | fMoW Sentinel -> RGB Super-resolution | [Download](https://drive.google.com/drive/u/2/folders/1xZAO3Pxm-v3t5PYa2_cfyJXGHNvmif7p) |
-
-
-The Jupyter notebook is:
-
-_Coming soon, stay tuned..._
 
 ## Training
 These sections describe how to launch training using `accelerate`.
