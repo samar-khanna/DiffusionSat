@@ -52,25 +52,35 @@ The relevant model checkpoints can be found here:
 ## Training
 These sections describe how to launch training using `accelerate`.
 
+
+#### A note on `accelerate`
+In this repository, we provide an example config file to use with `accelerate` in `launch_accelerate_configs`. 
+You can also configure your own file by running `accelerate config` in your terminal and following the steps. 
+This will save the config file in the  cache location (eg: `.cache/huggingface/accelerate/default_config.yaml`), 
+and you can simply copy over the `.yaml` file to `launch_accelerate_configs/` or remove the 
+`--config_file` argument from `accelerate launch` in the bash script.
+
+
+#### A note on datasets
+See [this section](#datasets) for more details on how to use `webdataset` for training. 
+You will need to specify the dataset shardlist `.txt` files in `./webdataset_shards`.
+
+
 ### Single-Image Training
 To train the `(text, metadata) -> single_image` model, use the following command:
 ```shell
 ./launch_scripts/launch_256_fmow_satlas_spacenet_img_txt_md.sh launch_accelerate_configs/single_gpu_accelerate_config.yaml
 ```
-Here we provide an example config file to use with `accelerate`, but you can also configure your own
-file by running `accelerate config` and following the steps. This will save the config file in the 
-cache location (eg: `.cache/huggingface/accelerate/default_config.yaml`), 
-and you can simply copy over the `.yaml` file to `launch_accelerate_configs/` or remove the 
-`--config_file` argument from `accelerate launch` in the bash script.
 
 ### Conditional (ControlNet) Training
 To train the `(text, target_metadata, conditioning_metadata, conditioning_images) -> single_image` ControlNet model, use the following commands, 
-detailed below. As a quick summary, these scripts use a frozen single-image model (see above) as a prior to 
+detailed below.  
+
+As a quick summary, these scripts use a frozen single-image model (see above) as a prior to 
 train a ControlNet (which could be a 3D ControlNet for temporal conditioning images). 
 This ControlNet can then generate a new image for the desired input text and metadata prompt, 
 conditioned on additional metadata and images.
 
-Note that you will need to specify the shardlist `.txt` files in `./webdataset_shards`. 
 You will also need to provide the path to the single-image model checkpoint 
 (by specifying this path in the `UNET_PATH` variable) that will remain frozen throughout training.
 
@@ -109,7 +119,10 @@ or you can modify the data-loading to use your own custom dataset formats.
 
 We have provided example shardlists in `webdataset_shards`. The training code will read the relevant file,
 and load data using the data paths in this file. The advantage of using `webdataset` is that your data
-does not need to only be on disk, and you can stream data from buckets in AWS S3 as well.
+does not need to only be on disk, and you can stream data from buckets in AWS S3 as well.  
+
+We also provide a small sample `webdataset` in `webdataset_shards/texas_housing_val_10sample.tar`, sourced from 
+the validation set of the Texas housing super-resolution task.
 
 
 #### fMoW
