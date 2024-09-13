@@ -1,7 +1,7 @@
 # DiffusionSat (ICLR 2024)
 **[Website](https://samar-khanna.github.io/DiffusionSat/)** | 
 **[Paper](https://arxiv.org/abs/2312.03606)**   |
-**[Video](https://recorder-v3.slideslive.com/?share=92102&s=22fca8d7-2deb-4bf0-af4a-02d1839dc69b)**
+**[Video](https://slideslive.com/39018155/diffusionsat-a-generative-foundation-model-for-satellite-imagery)**
 
 This is the official repository for the ICLR 2024 paper 
 "_DiffusionSat: A Generative Foundation Model For Satellite Imagery_".  
@@ -20,8 +20,10 @@ Authors:
 Please refer to `INSTALLATION.md`.
 
 ## Model checkpoint files
-Model checkpoint files can be found at [this link](https://drive.google.com/drive/u/2/folders/1p6nk4S5IpZEck3_xLo2hcI2Ha3P8LiA9).
-Note that this is a temporary location, and checkpoint files may be moved to another location in the future (I will update the README in this case).  
+Model checkpoint files have been uploaded to Zenodo within the DiffusionSat community at [this link](https://zenodo.org/communities/diffusionsat).
+
+**OLD**: Model checkpoint files were previously available [on Google Drive](https://drive.google.com/drive/u/2/folders/1p6nk4S5IpZEck3_xLo2hcI2Ha3P8LiA9).
+Note that the files on Google Drive may not be forever available, and could be taken down at any moment.  
 (While the files are on Google Drive, you can use [gdown](https://github.com/wkentaro/gdown) to download them).
 
 ## Single Image Generation
@@ -30,10 +32,10 @@ The relevant jupyter notebook can be found in `notebooks/single-image.ipynb`.
 
 The relevant model checkpoints can be found here:  
 
-| Resolution | Link     |
-|------------|----------|
-| 512 x 512  | [Download](https://drive.google.com/drive/u/2/folders/1zddxoEVNpbffIti8gUbhCRoL1w-tkMK2) |
-| 256 x 256  | [Download](https://drive.google.com/drive/u/2/folders/1SZnVpIaYyWN7WbAM7Njn-DDOZ7gRCmQ9) |
+| Resolution | Zenodo Page                                 | Download Link                                                                                                |
+|------------|---------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| 512 x 512  | [View](https://zenodo.org/records/13751498) | [Download](https://zenodo.org/records/13751498/files/finetune_sd21_sn-satlas-fmow_snr5_md7norm_bs64.zip)     |
+| 256 x 256  | [View](https://zenodo.org/records/13756199) | [Download](https://zenodo.org/records/13756199/files/finetune_sd21_256_sn-satlas-fmow_snr5_md7norm_bs64.zip) |
 
 
 ## Conditional Image Generation
@@ -44,10 +46,10 @@ Generating with a ControlNet that accepts a single conditioning image + metadata
 
 The relevant model checkpoints can be found here:
 
-| Task                                  | Link     |
-|---------------------------------------|----------|
-| Texas Super-resolution                | [Download](https://drive.google.com/drive/u/2/folders/1MVg6RkUOC8YoEBEUmBbi0xPNmTHvDnB2) |
-| fMoW Sentinel -> RGB Super-resolution | [Download](https://drive.google.com/drive/u/2/folders/1xZAO3Pxm-v3t5PYa2_cfyJXGHNvmif7p) |
+| Task                                  | Zenodo Page                                 | Download Link                                                                                     |
+|---------------------------------------|---------------------------------------------|---------------------------------------------------------------------------------------------------|
+| Texas Super-resolution                | [View](https://zenodo.org/records/13756211) | [Download](https://zenodo.org/records/13756211/files/controlnet3d-mixattn_sd21_md7norm_texas.zip) |
+| fMoW Sentinel -> RGB Super-resolution | [View](https://zenodo.org/records/13756246) | [Download](https://zenodo.org/records/13756246/files/controlnet_sd21_md7norm_fmow_condres256.zip) |
 
 ## Training
 These sections describe how to launch training using `accelerate`.
