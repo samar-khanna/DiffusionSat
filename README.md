@@ -1,7 +1,8 @@
 # DiffusionSat (ICLR 2024)
 **[Website](https://samar-khanna.github.io/DiffusionSat/)** | 
 **[Paper](https://arxiv.org/abs/2312.03606)**   |
-**[Video](https://slideslive.com/39018155/diffusionsat-a-generative-foundation-model-for-satellite-imagery)**
+**[Video](https://slideslive.com/39018155/diffusionsat-a-generative-foundation-model-for-satellite-imagery)**  |
+**[Zenodo](https://zenodo.org/communities/diffusionsat)**  
 
 This is the official repository for the ICLR 2024 paper 
 "_DiffusionSat: A Generative Foundation Model For Satellite Imagery_".  
