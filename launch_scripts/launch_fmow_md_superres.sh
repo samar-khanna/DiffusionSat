@@ -12,7 +12,7 @@ accelerate launch --config_file="$1" --mixed_precision="fp16" --main_process_por
   --wandb="${WANDB_PROJ}" \
   --pretrained_model_name_or_path=$MODEL_NAME --unet_path=$UNET_PATH \
   --num_metadata=7 --num_cond=1 --num_channels=13 \
-  --dataset="fmow" --shardlist="./webdataset_shards/fmow_superres_shardlist_disk.txt" \
+  --dataset="fmow" --shardlist="./datasets/fmow_superres_shardlist_disk.txt" \
   --resolution=512 \
   --cond_resolution=256 \
   --dropped_bands 0 9 10 --flip_bgr \

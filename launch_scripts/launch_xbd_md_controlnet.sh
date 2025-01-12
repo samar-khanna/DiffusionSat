@@ -11,7 +11,7 @@ export OUT_DIR="./outputs/controlnet_sd21_md7norm_xbd_past"
 accelerate launch --config_file="$1" --mixed_precision="fp16" --main_process_port=43736  --gpu_ids="$CUDA_VISIBLE_DEVICES"  train_controlnet.py \
   --wandb="${WANDB_PROJ}" \
   --pretrained_model_name_or_path=$MODEL_NAME --unet_path=$UNET_PATH \
-  --dataset="xbd" --xbd_task="past" --shardlist="./webdataset_shards/xbd_shardlist_disk.txt" \
+  --dataset="xbd" --xbd_task="past" --shardlist="./datasets/xbd_shardlist_disk.txt" \
   --num_metadata=7 --num_cond=1 \
   --resolution=512 \
   --train_batch_size=16 \

@@ -1,0 +1,17 @@
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/fmow-512-train/{000000..000364}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/SN1_buildings_train/{000000..000003}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/SN2_buildings_train/{000000..000027}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/SN5_roads_train/{000000..000023}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/airplane/highres-airplane-train-000000.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/building/highres-building-train-{000000..000079}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/crop_type/highres-crop_type-train-000000.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/dem/highres-dem-train-{000000..000003}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/land_cover/highres-land_cover-train-{000000..000048}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/park_sport/highres-park_sport-train-{000000..000001}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/park_type/highres-park_type-train-{000000..000001}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/point/highres-point-train-{000000..000009}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/polygon/highres-polygon-train-{000000..000063}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/road_type/highres-road_type-train-{000000..000001}.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/track_sport/highres-track_sport-train-000000.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/tree_cover/highres-tree_cover-train-000000.tar -
+pipe:aws s3 cp s3://BUCKET_NAME/satellite_datasets/satlas_train/water_event/highres-water_event-train-000000.tar -

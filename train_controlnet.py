@@ -533,7 +533,7 @@ def parse_args(input_args=None):
     parser.add_argument("--wandb", type=str, default=None, help="Name of wandb project. None to not use wandb.")
     parser.add_argument("--dataset", type=str, default='texas', choices=['texas', 'fmow', 'fmow_temporal', 'xbd'])
     parser.add_argument(
-        '--shardlist', type=str, default='./webdataset_shards/example_shardlist_disk.txt',
+        '--shardlist', type=str, default='./datasets/example_shardlist_disk.txt',
         help='Path to .txt file containing lists of shards (loaded in webdataset format).'
     )
     parser.add_argument("--texas_task", type=str, default='random', choices=['random', 'past', 'future'])
@@ -895,7 +895,7 @@ def main(args):
             yield output
 
 
-    fmow_meta_df = pd.read_csv('fmow-train-meta.csv')
+    fmow_meta_df = pd.read_csv('datasets/fmow-train-meta.csv')
     def fmow_preprocess_train(examples):
         for example in examples:
             if args.text_metadata:

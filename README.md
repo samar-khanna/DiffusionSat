@@ -23,7 +23,7 @@ We use conda to create our environments. You will have to do the following:
 cd DiffusionSat 
 conda create -n diffusionsat python=3.10
 
-# if you want cuda 11.8, run this replace the index url with https://download.pytorch.org/whl/cu118
+# if you want cuda 11.8, replace the index url with https://download.pytorch.org/whl/cu118
 pip install torch==2.2.2 torchvision==0.17.2 --index-url https://download.pytorch.org/whl/cu121
 pip install -e ".[torch]"  # install editable diffusers
 pip install -r requirements_remaining.txt
@@ -75,7 +75,7 @@ and you can simply copy over the `.yaml` file to `launch_accelerate_configs/` or
 
 #### A note on datasets
 See [this section](#datasets) for more details on how to use `webdataset` for training. 
-You will need to specify the dataset shardlist `.txt` files in `./webdataset_shards`.
+You will need to specify the dataset shardlist `.txt` files in `./datasets`.
 
 
 ### Single-Image Training
@@ -129,11 +129,11 @@ The datasets we use are in [`webdataset`](https://github.com/webdataset/webdatas
 You will need to prepare your datasets in this format to be able to train using the given code,
 or you can modify the data-loading to use your own custom dataset formats.
 
-We have provided example shardlists in `webdataset_shards`. The training code will read the relevant file,
+We have provided example shardlists in `datasets`. The training code will read the relevant file,
 and load data using the data paths in this file. The advantage of using `webdataset` is that your data
 does not need to only be on disk, and you can stream data from buckets in AWS S3 as well.  
 
-We also provide a small sample `webdataset` in `webdataset_shards/texas_housing_val_10sample.tar`, sourced from 
+We also provide a small sample `webdataset` in `datasets/texas_housing_val_10sample.tar`, sourced from 
 the validation set of the Texas housing super-resolution task.
 
 
@@ -145,7 +145,8 @@ output.cls: label_idx  # eg: 32
 input.npy: (h,w,c) numpy array
 metadata.json: {'img_filename': ..., 'gsd': ..., 'cloud_cover': ..., 'timestamp': ..., 'country_code': ...}
 ```
-Note that fMoW also requires a metadata `.csv` file.
+Note that fMoW also requires metadata `.csv` files, which have been provided in `datasets/fmow-train-meta.csv` 
+and `datasets/fmow-val-meta.csv`.
 
 ## Citation
 If you find our project helpful, please cite our paper:

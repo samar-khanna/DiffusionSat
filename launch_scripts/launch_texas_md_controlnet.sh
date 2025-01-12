@@ -11,7 +11,7 @@ export OUT_DIR="./outputs/controlnet3d-mixattn_sd21_md7norm_texas"
 accelerate launch --config_file="$1" --mixed_precision="fp16" --main_process_port=47860  --gpu_ids="$CUDA_VISIBLE_DEVICES"  train_controlnet.py \
   --wandb="${WANDB_PROJ}" \
   --pretrained_model_name_or_path=$MODEL_NAME --unet_path=$UNET_PATH \
-  --dataset="texas" --texas_task="random" --shardlist="./webdataset_shards/texas_shardlist_disk.txt" \
+  --dataset="texas" --texas_task="random" --shardlist="./datasets/texas_shardlist_disk.txt" \
   --num_metadata=7 --num_cond=3 --temporal --temporal_attn \
   --resolution=256 \
   --train_batch_size=32 \

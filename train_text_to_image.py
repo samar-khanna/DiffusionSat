@@ -408,7 +408,7 @@ def parse_args():
     # CUSTOM
     parser.add_argument("--wandb", type=str, default=None, help="Name of wandb project. None to not use wandb.")
     parser.add_argument(
-        '--shardlist', type=str, default='./webdataset_shards/example_shardlist_disk.txt',
+        '--shardlist', type=str, default='./datasets/example_shardlist_disk.txt',
         help='Path to .txt file containing lists of shards (loaded in webdataset format).'
     )
     parser.add_argument(
@@ -657,7 +657,7 @@ def main():
         ]
     )
 
-    fmow_meta_df = pd.read_csv('fmow-train-meta.csv')
+    fmow_meta_df = pd.read_csv('datasets/fmow-train-meta.csv')
     def fmow_preprocess_example(example):
         if args.text_metadata:
             metadata = fmow_numerical_metadata(example, fmow_meta_df, args.resolution, args.num_metadata, base_year=0)
