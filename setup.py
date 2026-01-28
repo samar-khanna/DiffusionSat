@@ -76,7 +76,7 @@ from setuptools import find_packages, setup
 
 # IMPORTANT:
 # 1. all dependencies should be listed here with their version requirements if any
-# 2. once modified, run: `make deps_table_update` to update src/diffusers/dependency_versions_table.py
+# 2. once modified, run: `make deps_table_update` to update libs/diffusers/dependency_versions_table.py
 _deps = [
     "Pillow",  # keep the PIL.Image.Resampling deprecation away
     "accelerate>=0.11.0",
@@ -122,7 +122,7 @@ _deps = [
 # some of the values are versioned whereas others aren't.
 deps = {b: a for a, b in (re.findall(r"^(([^!=<>~]+)(?:[!=<>~].*)?$)", x)[0] for x in _deps)}
 
-# since we save this data in src/diffusers/dependency_versions_table.py it can be easily accessed from
+# since we save this data in libs/diffusers/dependency_versions_table.py it can be easily accessed from
 # anywhere. If you need to quickly access the data from this table in a shell, you can do so easily with:
 #
 # python -c 'import sys; from diffusers.dependency_versions_table import deps; \
@@ -130,7 +130,7 @@ deps = {b: a for a, b in (re.findall(r"^(([^!=<>~]+)(?:[!=<>~].*)?$)", x)[0] for
 #
 # Just pass the desired package names to that script as it's shown with 2 packages above.
 #
-# If diffusers is not yet installed and the work is done from the cloned repo remember to add `PYTHONPATH=src` to the script above
+# If diffusers is not yet installed and the work is done from the cloned repo remember to add `PYTHONPATH=libs` to the script above
 #
 # You can then feed this for example to `pip`:
 #
@@ -152,7 +152,7 @@ class DepsTableUpdateCommand(Command):
     description = "build runtime dependency table"
     user_options = [
         # format: (long option, short option, description).
-        ("dep-table-update", None, "updates src/diffusers/dependency_versions_table.py"),
+        ("dep-table-update", None, "updates libs/diffusers/dependency_versions_table.py"),
     ]
 
     def initialize_options(self):
@@ -172,7 +172,7 @@ class DepsTableUpdateCommand(Command):
             "}",
             "",
         ]
-        target = "src/diffusers/dependency_versions_table.py"
+        target = "libs/diffusers/dependency_versions_table.py"
         print(f"updating {target}")
         with open(target, "w", encoding="utf-8", newline="\n") as f:
             f.write("\n".join(content))
@@ -234,8 +234,8 @@ setup(
     author="The HuggingFace team",
     author_email="patrick@huggingface.co",
     url="https://github.com/huggingface/diffusers",
-    package_dir={"": "src"},
-    packages=find_packages("src"),
+    package_dir={"": "libs"},
+    packages=find_packages("libs"),
     include_package_data=True,
     python_requires=">=3.7.0",
     install_requires=install_requires,

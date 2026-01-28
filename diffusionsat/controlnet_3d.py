@@ -2,7 +2,6 @@
 # References:
 # https://github.com/huggingface/diffusers/
 ###########################################################################
-from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import einops
@@ -11,17 +10,18 @@ from torch import nn
 from torch.nn import functional as F
 
 from diffusers.configuration_utils import ConfigMixin, register_to_config
-from diffusers.utils import BaseOutput, logging
-from diffusers.models.attention_processor import AttentionProcessor, AttnProcessor
+from diffusers.models.attention import AttentionMixin
+from diffusers.models.controlnets.controlnet import ControlNetOutput, zero_module
 from diffusers.models.embeddings import TimestepEmbedding, Timesteps
 from diffusers.models.modeling_utils import ModelMixin
-from diffusers.models.unet_2d_blocks import (
+from diffusers.models.unets.unet_2d_blocks import (
     CrossAttnDownBlock2D,
     DownBlock2D,
     UNetMidBlock2DCrossAttn,
     get_down_block,
 )
-from diffusers.models.transformer_temporal import TransformerTemporalModel
+from diffusers.models.transformers.transformer_temporal import TransformerTemporalModel
+from diffusers.utils import logging
 
 from .sat_unet import SatUNet
 
@@ -32,17 +32,11 @@ logger = logging.get_logger(__name__)  # pylint: disable=invalid-name
 class MixingParam(torch.autograd.Function):
     @staticmethod
     def forward(ctx, input):
-        return input.clamp(min=0., max=1.) # the value in iterative = 2
+        return input.clamp(min=0.0, max=1.0)  # the value in iterative = 2
 
     @staticmethod
     def backward(ctx, grad_output):
         return grad_output.clone()
-
-
-@dataclass
-class ControlNetOutput(BaseOutput):
-    down_block_res_samples: Tuple[torch.Tensor]
-    mid_block_res_sample: torch.Tensor
 
 
 class ControlNetConditioningEmbedding(nn.Module):
@@ -71,7 +65,15 @@ class ControlNetConditioningEmbedding(nn.Module):
             channel_in = block_out_channels[i]
             channel_out = block_out_channels[i + 1]
             self.blocks.append(nn.Conv3d(channel_in, channel_in, kernel_size=3, padding=1))
-            self.blocks.append(nn.Conv3d(channel_in, channel_out, kernel_size=(1, 3, 3), padding=(0, 1, 1), stride=(1, 2, 2)))
+            self.blocks.append(
+                nn.Conv3d(
+                    channel_in,
+                    channel_out,
+                    kernel_size=(1, 3, 3),
+                    padding=(0, 1, 1),
+                    stride=(1, 2, 2),
+                )
+            )
 
         self.conv_out = zero_module(
             nn.Conv3d(block_out_channels[-1], conditioning_embedding_channels, kernel_size=3, padding=1)
@@ -90,7 +92,7 @@ class ControlNetConditioningEmbedding(nn.Module):
         return embedding
 
 
-class ControlNetModel3D(ModelMixin, ConfigMixin):
+class ControlNetModel3D(ModelMixin, AttentionMixin, ConfigMixin):
     _supports_gradient_checkpointing = True
 
     @register_to_config
@@ -402,135 +404,6 @@ class ControlNetModel3D(ModelMixin, ConfigMixin):
 
         return controlnet
 
-    @property
-    # Copied from diffusers.models.unet_2d_condition.UNet2DConditionModel.attn_processors
-    def attn_processors(self) -> Dict[str, AttentionProcessor]:
-        r"""
-        Returns:
-            `dict` of attention processors: A dictionary containing all attention processors used in the model with
-            indexed by its weight name.
-        """
-        # set recursively
-        processors = {}
-
-        def fn_recursive_add_processors(name: str, module: torch.nn.Module, processors: Dict[str, AttentionProcessor]):
-            if hasattr(module, "set_processor"):
-                processors[f"{name}.processor"] = module.processor
-
-            for sub_name, child in module.named_children():
-                fn_recursive_add_processors(f"{name}.{sub_name}", child, processors)
-
-            return processors
-
-        for name, module in self.named_children():
-            fn_recursive_add_processors(name, module, processors)
-
-        return processors
-
-    # Copied from diffusers.models.unet_2d_condition.UNet2DConditionModel.set_attn_processor
-    def set_attn_processor(self, processor: Union[AttentionProcessor, Dict[str, AttentionProcessor]]):
-        r"""
-        Parameters:
-            `processor (`dict` of `AttentionProcessor` or `AttentionProcessor`):
-                The instantiated processor class or a dictionary of processor classes that will be set as the processor
-                of **all** `Attention` layers.
-            In case `processor` is a dict, the key needs to define the path to the corresponding cross attention processor. This is strongly recommended when setting trainable attention processors.:
-
-        """
-        count = len(self.attn_processors.keys())
-
-        if isinstance(processor, dict) and len(processor) != count:
-            raise ValueError(
-                f"A dict of processors was passed, but the number of processors {len(processor)} does not match the"
-                f" number of attention layers: {count}. Please make sure to pass {count} processor classes."
-            )
-
-        def fn_recursive_attn_processor(name: str, module: torch.nn.Module, processor):
-            if hasattr(module, "set_processor"):
-                if not isinstance(processor, dict):
-                    module.set_processor(processor)
-                else:
-                    module.set_processor(processor.pop(f"{name}.processor"))
-
-            for sub_name, child in module.named_children():
-                fn_recursive_attn_processor(f"{name}.{sub_name}", child, processor)
-
-        for name, module in self.named_children():
-            fn_recursive_attn_processor(name, module, processor)
-
-    # Copied from diffusers.models.unet_2d_condition.UNet2DConditionModel.set_default_attn_processor
-    def set_default_attn_processor(self):
-        """
-        Disables custom attention processors and sets the default attention implementation.
-        """
-        self.set_attn_processor(AttnProcessor())
-
-    # Copied from diffusers.models.unet_2d_condition.UNet2DConditionModel.set_attention_slice
-    def set_attention_slice(self, slice_size):
-        r"""
-        Enable sliced attention computation.
-
-        When this option is enabled, the attention module will split the input tensor in slices, to compute attention
-        in several steps. This is useful to save some memory in exchange for a small speed decrease.
-
-        Args:
-            slice_size (`str` or `int` or `list(int)`, *optional*, defaults to `"auto"`):
-                When `"auto"`, halves the input to the attention heads, so attention will be computed in two steps. If
-                `"max"`, maximum amount of memory will be saved by running only one slice at a time. If a number is
-                provided, uses as many slices as `attention_head_dim // slice_size`. In this case, `attention_head_dim`
-                must be a multiple of `slice_size`.
-        """
-        sliceable_head_dims = []
-
-        def fn_recursive_retrieve_sliceable_dims(module: torch.nn.Module):
-            if hasattr(module, "set_attention_slice"):
-                sliceable_head_dims.append(module.sliceable_head_dim)
-
-            for child in module.children():
-                fn_recursive_retrieve_sliceable_dims(child)
-
-        # retrieve number of attention layers
-        for module in self.children():
-            fn_recursive_retrieve_sliceable_dims(module)
-
-        num_sliceable_layers = len(sliceable_head_dims)
-
-        if slice_size == "auto":
-            # half the attention head size is usually a good trade-off between
-            # speed and memory
-            slice_size = [dim // 2 for dim in sliceable_head_dims]
-        elif slice_size == "max":
-            # make smallest slice possible
-            slice_size = num_sliceable_layers * [1]
-
-        slice_size = num_sliceable_layers * [slice_size] if not isinstance(slice_size, list) else slice_size
-
-        if len(slice_size) != len(sliceable_head_dims):
-            raise ValueError(
-                f"You have provided {len(slice_size)}, but {self.config} has {len(sliceable_head_dims)} different"
-                f" attention layers. Make sure to match `len(slice_size)` to be {len(sliceable_head_dims)}."
-            )
-
-        for i in range(len(slice_size)):
-            size = slice_size[i]
-            dim = sliceable_head_dims[i]
-            if size is not None and size > dim:
-                raise ValueError(f"size {size} has to be smaller or equal to {dim}.")
-
-        # Recursively walk through all the children.
-        # Any children which exposes the set_attention_slice method
-        # gets the message
-        def fn_recursive_set_attention_slice(module: torch.nn.Module, slice_size: List[int]):
-            if hasattr(module, "set_attention_slice"):
-                module.set_attention_slice(slice_size.pop())
-
-            for child in module.children():
-                fn_recursive_set_attention_slice(child, slice_size)
-
-        reversed_slice_size = list(reversed(slice_size))
-        for module in self.children():
-            fn_recursive_set_attention_slice(module, reversed_slice_size)
-
     def _set_gradient_checkpointing(self, module, value=False):
         if isinstance(module, (CrossAttnDownBlock2D, DownBlock2D)):
             module.gradient_checkpointing = value
@@ -727,9 +600,3 @@ class ControlNetModel3D(ModelMixin, ConfigMixin):
         return ControlNetOutput(
             down_block_res_samples=down_block_res_samples, mid_block_res_sample=mid_block_res_sample
         )
-
-
-def zero_module(module):
-    for p in module.parameters():
-        nn.init.zeros_(p)
-    return module

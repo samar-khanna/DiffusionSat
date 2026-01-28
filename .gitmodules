@@ -1,0 +1,3 @@
+[submodule "libs/diffusers"]
+	path = libs/diffusers
+	url = https://github.com/huggingface/diffusers
